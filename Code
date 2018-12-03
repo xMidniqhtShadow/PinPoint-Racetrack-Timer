@@ -1,0 +1,48 @@
+int seconds = 0;
+#include <Ultrasonic.h>
+Ultrasonic ultrasonicR(13,12);
+//Ultrasonic ultrasonicL(11,10);
+int distanceR;
+int distanceL;
+int buttonPin = 8;
+int buttonState;
+int pressed = 0;
+void setup() {
+  Serial.begin(9600);
+  pinMode(buttonPin, INPUT);
+}
+
+void loop() {
+  distanceR = ultrasonicR.read();
+//  distanceL = ultrasonicL.read();
+  buttonState = digitalRead(buttonPin);
+//  if (buttonState == LOW){
+//    pressed = 1 - pressed;
+//    delay(200);
+//  }
+  if(buttonState == LOW && pressed == 0 && distanceR > 15){
+    pressed = 1;
+    delay(100);
+  }
+  else if(pressed == 1 && distanceR < 15){
+    pressed = 0;
+    delay(100);
+  }
+  if(pressed == 1){
+   seconds = seconds + 1; 
+  }
+  if(pressed == 0){
+   seconds = seconds;
+  }
+  Serial.print("Seconds passed: ");
+  Serial.println(seconds);
+//  Serial.print("Button State: ");
+//  Serial.println(buttonState);
+//  Serial.print("Pressed: ");
+//  Serial.println(pressed);
+//  Serial.print("Left Ultrasonic: ");
+//  Serial.println(distanceL);
+  Serial.print("Right Ultrasonic: ");
+  Serial.println(distanceR);
+  delay(60);
+}
